@@ -1,12 +1,12 @@
 import type {LayerProps, FillLayer} from 'react-map-gl';
 
-export const countryLayer: LayerProps = {
-  id: "country_layer",
+export const prevalenceLayer: LayerProps = {
+  id: "fc_prev_layer",
   type: "raster",
   source: "mapbox-dem"
 }
 
-export const dataLayer: LayerProps = {
+export const adm0Layer: LayerProps = {
   id: 'admin-source',
   type: 'fill',
   paint: {
@@ -21,10 +21,30 @@ export const admin1Layer: LayerProps = {
   type: 'fill',
   paint: {
     'fill-outline-color': '#fff',
-    'fill-color': 'rgb(211, 19, 12)',
+    'fill-color': {
+      property: 'value',
+      stops: [
+        [5, '#29563a'],
+        [10, '#73b358'],
+        [20, '#cbcc58'],
+        [30, '#d5a137'],
+        [40, '#eb5a26'],
+        [50, '#d3130c'],
+      ]},
     'fill-opacity': 0.75
   }
 };
+
+export const admin1OutlineLayer: LayerProps = {
+  id: 'admin-outline',
+  type: 'line',
+  source: 'admin1-source',
+  layout: {},
+  paint: {
+    'line-color': '#fff',
+    'line-width': 3
+  }
+}
 
 // Highlighted administrative polygons
 export const highlightLayer: FillLayer = {

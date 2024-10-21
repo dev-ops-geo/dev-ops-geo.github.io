@@ -2,13 +2,15 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import Map, { NavigationControl, Layer, Source, ViewState, MapRef } from 'react-map-gl';
 import axios from "axios";
 import type GeoJSON from 'geojson';
-import {dataLayer, admin1Layer, highlightLayer, countryLayer} from './map-style';
+import {adm0Layer, admin1Layer, admin1OutlineLayer, highlightLayer, prevalenceLayer} from './map-style';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { HiMap } from "react-icons/hi";
 import CustomOverlay from './custom-overlay';
 import { Button, Popover } from 'flowbite-react';
 import { BaseMapComponent } from './basemap';
-
+import { simplifyJson } from '../../utils';
+import { FcPrevalenceLegend } from './legend';
+import { HoverInfo } from './hoverinfo';
 const MAPBOX_TOKEN = import.meta.env.VITE_APP_MAPBOX_TOKEN;
 
 interface MapProps {
@@ -33,7 +35,7 @@ const MapComponent: React.FC<MapProps> = ({ initialLatitude, initialLongitude, z
   const [adminData, setAdminData] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>();
   const [admin1Data, setAdmin1Data] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry>>();
   const mapRef = useRef<MapRef>(null);
-  const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/light-v9");
+  const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/dark-v9");
 
   useEffect(() => {
     axios
@@ -43,6 +45,7 @@ const MapComponent: React.FC<MapProps> = ({ initialLatitude, initialLongitude, z
   }, []);
 
   const onHover = useCallback((event: any) => {
+    
     const {
       features,
       point: {x, y},
@@ -68,7 +71,7 @@ const MapComponent: React.FC<MapProps> = ({ initialLatitude, initialLongitude, z
     let adm0_id = clickedFeature.properties.adm0_id;
     axios
       .get("https://api.hungermapdata.org/v2/adm0/"+ adm0_id +"/adm1data.json")
-      .then((res) => setAdmin1Data(res.data))
+      .then((res) => setAdmin1Data(simplifyJson(res.data, f => f.properties?.fcs.ratio)))
       .catch((err) => console.log(err));
     setClickInfo(clickedFeature && {feature: clickedFeature, x, y});
     updateCountryInfo(clickedFeature.properties);
@@ -87,12 +90,12 @@ const MapComponent: React.FC<MapProps> = ({ initialLatitude, initialLongitude, z
       mapStyle={mapStyle}
       mapboxAccessToken={MAPBOX_TOKEN}
       onMove={evt => setViewState(evt.viewState)}
-      interactiveLayerIds={['admin-source']}
+      interactiveLayerIds={['admin1-source', 'admin-source', 'admin-outline']}
       onMouseMove={onHover}
       onClick={onClick}
     >
-      <NavigationControl position="bottom-right" />
-      <CustomOverlay position="bottom-right">
+      <NavigationControl style={{marginTop: 100,}} position="top-right" />
+      <CustomOverlay position="top-right">
         <Popover content={<BaseMapComponent updateSource={mapStyleCallback}/>} trigger="click" placement="left">
           <Button color="light" size="xs">
             <HiMap className="h-3 w-3 text-black dark:text-white" />
@@ -106,21 +109,19 @@ const MapComponent: React.FC<MapProps> = ({ initialLatitude, initialLongitude, z
           tileSize={256}
           maxzoom={20}
         />
-      <Layer {...countryLayer} />
+      <Layer {...prevalenceLayer} />
       <Source type="geojson" data={adminData}>
-        <Layer {...dataLayer} />
+        <Layer {...adm0Layer} />
         <Layer {...highlightLayer} filter={filter} />
       </Source>
       <Source type="geojson" data={admin1Data}>
         <Layer {...admin1Layer} />
+        <Layer {...admin1OutlineLayer} />
       </Source>
-      {hoverInfo && (
-          <div className="absolute tooltip z-50 max-w-sm p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style={{left: hoverInfo.x, top: hoverInfo.y}}>
-            <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{hoverInfo.feature.properties.adm0_name}</h5>
-            <div className="mb-1 font-normal text-gray-700 dark:text-gray-400">Population: {hoverInfo.feature.properties.fcs_people_total}</div>
-            <div className="mb-1 font-normal text-gray-700 dark:text-gray-400">Income Level: {hoverInfo.feature.properties.incomeLevel}</div>
-          </div>
+      {hoverInfo  && (
+          <HoverInfo hoverInfo={hoverInfo}/>
         )}
+      <FcPrevalenceLegend mapStyle={mapStyle}/>
     </Map>
   ); 
 };

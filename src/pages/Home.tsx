@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import axios from "axios";
 import { CountryInfoComponent } from "../components/CountryInfo";
-import MapComponent from "../components/Map/Map";
+import MapComponent from "../components/Map";
 import Navbar from "../components/Navbar";
 export const HomePage = () => {
     const [countryInfo, setCountryInfo] = useState();

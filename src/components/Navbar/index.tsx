@@ -1,9 +1,7 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { DarkThemeToggle } from 'flowbite-react';
 import { Button } from '@mantine/core';
-import { HiHome, HiFolder, HiMail, HiSun, HiMoon } from "react-icons/hi";
-import { ActionIcon } from '@mantine/core';
-import ColorSchemeContext from '../../context/ColorSchemeContext';
+import { HiHome, HiFolder, HiMail } from "react-icons/hi";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,9 +12,6 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsOpen(false);
   };
-
-  const colorSchemeContext = useContext<any>(ColorSchemeContext);
-  const dark = colorSchemeContext?.colorScheme === 'dark';
 
   return (
     <nav className="fixed md:absolute md:top-0 right-0 left-0 z-[1000]">
@@ -49,10 +44,11 @@ const Navbar = () => {
 
           {/* Menu Links */}
           {!isOpen && 
-            <div className={`md:flex space-x-6 ${isOpen ? 'block' : 'hidden'} md:block z-[1000]`}>
+            <div className={`md:flex space-x-2 ${isOpen ? 'block' : 'hidden'} md:block z-[1000]`}>
               <Button
                 justify="space-between" 
-                fullWidth
+                w={100}
+                size="compact-md"
                 component="a"
                 href="#"
                 leftSection={<HiHome size="1rem" />}
@@ -61,7 +57,8 @@ const Navbar = () => {
               >About</Button>
               <Button
                 justify="space-between" 
-                fullWidth
+                w={100}
+                size="compact-md"
                 component="a"
                 href="#"
                 leftSection={<HiFolder size="1rem" />}
@@ -71,26 +68,15 @@ const Navbar = () => {
               
               <Button
                 justify="space-between" 
-                fullWidth
+                size="compact-md"
+                w={100}
                 component="a"
                 href="#"
                 leftSection={<HiMail size="1rem" />}
                 variant='filled'
                 color="black"
-              >Contact</Button>
-              <ActionIcon
-                variant="outline"
-                color={dark ? 'yellow' : 'blue'}
-                onClick={() => colorSchemeContext?.onChange(dark ? 'light' : 'dark')}
-                title="Toggle color scheme"
-              >
-                {dark ? (
-                  <HiSun style={{ width: 18, height: 18 }} />
-                ) : (
-                  <HiMoon style={{ width: 18, height: 18 }} />
-                )}
-              </ActionIcon>
-              <DarkThemeToggle className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-sm text-sm px-5 py-1.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"/>
+              >Contact</Button>              
+              <DarkThemeToggle className="hidden text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-sm text-sm px-5 py-1 me-2 mb-2 dark:bg-black dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"/>
             </div>
           }
         </div>
@@ -104,12 +90,12 @@ const Navbar = () => {
               About
             </a>
             <a href="#" className="block text-gray-800 hover:text-gray-600" onClick={closeMenu}>
-              Services
+              Media
             </a>
             <a href="#" className="block text-gray-800 hover:text-gray-600" onClick={closeMenu}>
               Contact
             </a>
-            <DarkThemeToggle/>
+            <DarkThemeToggle className='hidden'/>
           </div>
         </div>
       )}
