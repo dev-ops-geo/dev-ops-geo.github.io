@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.source-dark {
+    background-image: url('./assets/images/dark.png');
+    background-size: contain;
+}
+
+.source-light {
+    background-image: url('./assets/images/light.png');
+    background-size: contain;
+}
+
+.source-osm {
+    background-image: url('./assets/images/osm.png');
+    background-size: contain;
+}
