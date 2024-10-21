@@ -24,7 +24,6 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-1">          
           <div className="flex items-center text-2xl z-[1000] font-bold text-black md:text-black md:dark:text-white">
             <img src='./images/wfp_logo.svg'/><span className='ml-3'>Hunger Map Live</span></div>      
-          {/* Hamburger Icon for Mobile */}
           <div className="md:hidden z-[1000]">
             <button
               onClick={toggleMenu}
@@ -46,8 +45,7 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          {/* Logo */}
-          
+        
 
           {/* Menu Links */}
           {!isOpen && 
