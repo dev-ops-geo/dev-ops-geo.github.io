@@ -15,9 +15,9 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/" Component={HomePage}/>
+          <Route path="/about" Component={AboutPage} />
+          <Route path="/contact" Component={ContactPage} />
         </Routes>
       </Router>
       </MantineProvider>
