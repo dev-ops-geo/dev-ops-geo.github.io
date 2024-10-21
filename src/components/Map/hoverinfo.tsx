@@ -11,12 +11,11 @@ export const HoverInfo: React.FC<ChildProps> = ({hoverInfo}) => {
     let fcsGraph = hoverInfo?.feature.properties?.fcsGraph;
 
     if (fcsGraph) fcsGraph = JSON.parse(fcsGraph)
-    console.log(fcsGraph);
 
     return (
         <div>
         {
-            hoverInfo?.feature.properties.dataType && hoverInfo.feature.layer.id == "admin-source" && (
+            hoverInfo?.feature.properties.dataType && hoverInfo?.feature?.layer.id == "admin-source" && (
             <div className="absolute tooltip z-50 max-w-sm p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style={{left: hoverInfo.x, top: hoverInfo.y}}>
                 <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{hoverInfo.feature.properties.adm0_name}</h5>
                 <div className="mb-1 font-normal text-gray-700 dark:text-gray-400">Population: {hoverInfo.feature.properties.fcs_people_total}</div>

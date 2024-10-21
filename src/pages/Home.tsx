@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import { CountryInfoComponent } from "../components/CountryInfo";
 import MapComponent from "../components/Map";
-import Navbar from "../components/Navbar";
 export const HomePage = () => {
     const [countryInfo, setCountryInfo] = useState();
     const [countryData, setCountryData] =  useState();
@@ -28,10 +27,9 @@ export const HomePage = () => {
       }, []);
 
     return (
-    <>
-    <Navbar/>
+    <div className="min-h-screen">
     <MapComponent initialLatitude={0.0} initialLongitude={0.0} zoom={2} updateCountryInfo={countryClickCallback}/>
     <CountryInfoComponent countryInfo={countryInfo} countryData={countryData} nutritionData={nutritionData}></CountryInfoComponent>
-    </>
+    </div>
     )
 }
